@@ -4,6 +4,7 @@ from rest_framework import generics, status # create a class that inherits from 
 from .models import Room
 from rest_framework .views import APIView
 from rest_framework.response import Response
+from django.http import JsonResponse
 
 
 # API View - view list of all rooms
@@ -85,3 +86,14 @@ class CreateRoomView(APIView):
                 return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
 
         return Response(RoomSerializer(room).data, status=status.HTTP_400_BAD_REQUEST)
+
+class UserInRoomView(APIView):
+    def get(self, request, format=None):
+        # validate that the user has an active session
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        data = {
+            'code': self.request.session.get('room_code')
+        }
+        return JsonResponse(data, status=status.HTTP_200_OK)
