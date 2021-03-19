@@ -19,8 +19,8 @@ def generate_unique_code():
 
 # ROOM model that will host participating users
 class Room(models.Model):
-    code = models.CharField(max_length = 8, default = "", unique = True) # unique key to join a Room
-    host = models.CharField(max_length = 50, unique = True) # to track the constraint that one host only has one Room
+    code = models.CharField(max_length = 8, default = generate_unique_code, unique = True) # unique key to join a Room
+    host = models.CharField(max_length = 50, unique = True) # to track session key
     guest_can_pause = models.BooleanField(null = False, default = False) # permission to enable/disable pausing functionality by guests
     votes_to_skip = models.IntegerField(null = False, default = 1)
     created_at = models.DateTimeField(auto_now_add = True) 
